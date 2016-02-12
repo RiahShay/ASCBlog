@@ -4,12 +4,19 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    if params[:sort_viewed].present?
+      @posts = Post.order("view_count #{params[:sort]}")
+    elsif params[:sort_commented].present?
+      @posts = Post.order("comments.count #{params[:sort]}")
+    else
+      @posts = Post.all.sort_by(&:created_at).reverse
+    end
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @post.increment!(:view_count)
   end
 
   # GET /posts/new
@@ -71,4 +78,5 @@ class PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:content, :author, :title, :status)
     end
+
 end

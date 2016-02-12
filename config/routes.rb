@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-
+  get '/posts?sortViewed=[:sort_viewed]' => 'posts#index'
+  get '/posts?sortCommented=[:sort_commented]' => 'posts#index'
+  resources :authors
   resources :authors
   resources :posts do
     resources :comments
